@@ -5,7 +5,6 @@ import MessageBubble from './MessageBubble';
 import Button from './Button';
 import RegionSelector from './RegionSelector';
 import { generateContentWithGemini, categorizeProblemWithGemini } from '../services/geminiService';
-import { DEFAULT_REGION } from '../constants';
 
 interface ChatInterfaceProps {
   chatHistory: ChatMessage[];
@@ -52,7 +51,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         chatPrompt,
         'gemini-3-pro-preview',
         true,
-        selectedRegion // Pass region for context data injection
+        selectedRegion
       );
 
       const problemTag = await categorizeProblemWithGemini(userInput);
@@ -86,14 +85,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-160px)] md:h-[calc(100vh-200px)] lg:h-[calc(100vh-140px)] bg-white rounded-lg shadow-lg">
-      <div className="p-4 border-b border-gray-200">
+    <div className="flex flex-col h-[calc(100vh-220px)] bg-white">
+      <div className="p-4 border-b border-gray-100 bg-white">
         <RegionSelector selectedRegion={selectedRegion} onSelectRegion={onSelectRegion} />
       </div>
 
-      <div className="flex-grow p-4 overflow-y-auto flex flex-col space-y-3">
+      <div className="flex-grow p-4 overflow-y-auto flex flex-col space-y-3 bg-white">
         {chatHistory.length === 0 && (
-          <div className="flex-grow flex items-center justify-center text-gray-500 text-xl text-center px-4">
+          <div className="flex-grow flex items-center justify-center text-gray-400 text-lg text-center px-4">
             {selectedRegion}の課題について何でもご相談ください！<br/>
             統計データに基づいたアドバイスも可能です。
           </div>
@@ -102,19 +101,19 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           <MessageBubble key={msg.id} message={msg} />
         ))}
         {isLoading && (
-          <div className="self-start bg-gray-200 text-gray-800 my-2 p-3 rounded-xl rounded-bl-none shadow-sm animate-pulse text-lg">
+          <div className="self-start bg-white border border-gray-200 text-gray-600 my-2 p-3 rounded-xl rounded-bl-none animate-pulse text-base">
             AIがデータを分析中...
           </div>
         )}
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-200 flex items-center">
+      <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-100 flex items-center bg-white sticky bottom-0">
         <textarea
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
           placeholder="課題を入力してください..."
-          className="flex-grow resize-none border border-gray-300 rounded-md p-2 mr-2 focus:ring-indigo-500 focus:border-indigo-500 text-base md:text-lg h-12 max-h-24 overflow-hidden"
+          className="flex-grow resize-none border border-gray-200 rounded-md p-2 mr-2 focus:ring-indigo-500 focus:border-indigo-500 text-base h-12 max-h-24 overflow-hidden bg-white"
           rows={1}
           onInput={(e) => {
             const target = e.currentTarget;
